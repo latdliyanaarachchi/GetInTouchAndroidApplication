@@ -66,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
        // loadingPB.setVisibility(View.VISIBLE);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080/api/")
+                .baseUrl("http://getintouchapp-env.eba-xiuydug9.us-east-1.elasticbeanstalk.com/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
