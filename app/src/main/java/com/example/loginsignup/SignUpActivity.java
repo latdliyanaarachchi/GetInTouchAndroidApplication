@@ -1,13 +1,13 @@
 package com.example.loginsignup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.registration.R;
 
@@ -34,7 +34,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         View signUpBtn = findViewById(R.id.btnSignUp);
 
+
         signUpBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
@@ -42,28 +44,39 @@ public class SignUpActivity extends AppCompatActivity {
                 EditText email = findViewById(R.id.inputEmail);
                 EditText password = findViewById(R.id.inputPassword);
                 EditText cPassword = findViewById(R.id.inputConfirmPassword);
+                String emailContent = email.getText().toString().trim();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
+                if( email.length() <= 0||password.length()<=0||userName.length()<=0){
+                    Toast.makeText(SignUpActivity.this, "Please enter values for all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!emailContent.matches(emailPattern)) {
+                    Toast.makeText(SignUpActivity.this, "Please enter valid email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (userName.getText().toString().isEmpty() && password.getText().toString().isEmpty() && email.getText().toString().isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please enter all values", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-//                if(password.getText().toString()!=cPassword.getText().toString()){
-//                    Toast.makeText(SignUpActivity.this, "Password and Confirm Password Does not matching", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                // calling a method to post the data and passing our name and job.
-                postData(userName.getText().toString(), password.getText().toString(),email.getText().toString());
+                if (password.getText().toString() != cPassword.getText().toString()) {
+                    Toast.makeText(SignUpActivity.this, "Password and Confirm Password Does not matching", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                postData(userName.getText().toString(), password.getText().toString(), email.getText().toString());
             }
 
         });
     }
 
-    private void postData(String name, String email , String password) {
+    private void postData(String name, String email, String password) {
 
 
-       // loadingPB.setVisibility(View.VISIBLE);
+        // loadingPB.setVisibility(View.VISIBLE);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://getintouchapp-env.eba-xiuydug9.us-east-1.elasticbeanstalk.com/api/")
@@ -72,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
 
-        DataModal modal = new DataModal(name, email , password);
+        DataModal modal = new DataModal(name, email, password);
 
         Call<DataModal> call = retrofitAPI.createPost(modal);
 
@@ -81,17 +94,18 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DataModal> call, Response<DataModal> response) {
 
-                Toast.makeText(SignUpActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
 
 //                jobEdt.setText("");
 //                nameEdt.setText("");
 
                 DataModal responseFromAPI = response.body();
 
+                Toast.makeText(SignUpActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+
                 String responseString = "Response Code : " + response.code() + "\nName : " + responseFromAPI.getName() + "\n" + "Job : " + responseFromAPI.getEmail();
 
                 Toast.makeText(SignUpActivity.this, responseString, Toast.LENGTH_SHORT).show();
-               // responseTV.setText(responseString);
+                // responseTV.setText(responseString);
             }
 
             @Override
@@ -100,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 // setting text to our text view when
                 // we get error response from API.
-               // responseTV.setText("Error found is : " + t.getMessage());
+                // responseTV.setText("Error found is : " + t.getMessage());
             }
         });
     }

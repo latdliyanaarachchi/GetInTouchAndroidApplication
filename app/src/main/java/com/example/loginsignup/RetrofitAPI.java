@@ -8,6 +8,6 @@ import retrofit2.http.POST;
 public interface RetrofitAPI {
 
 
-    @POST("users")
+    @POST("user")
     Call<DataModal> createPost(@Body DataModal dataModal);
 }
