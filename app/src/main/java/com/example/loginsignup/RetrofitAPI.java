@@ -9,5 +9,8 @@ public interface RetrofitAPI {
 
 
     @POST("user")
-    Call<DataModal> createPost(@Body DataModal dataModal);
+    Call<DataModal> createPostSignUp(@Body DataModal dataModal);
+
+    @POST("login")
+    Call<LoginResponse> createPostLogin(@Body DataModalLogin dataModalLogin);
 }
