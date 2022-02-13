@@ -115,7 +115,7 @@
 
     </LinearLayout>
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/btnGoogle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
